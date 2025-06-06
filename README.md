@@ -1,5 +1,7 @@
 # apache-kafka-course
 
+Start kafka - kafka_start.sh
+
 This repository is for the Apache Kafka Course
 
 Install Kafka 4.0.0 Linux Mint

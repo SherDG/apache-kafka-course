@@ -16,6 +16,17 @@ bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --replication-fac
 # Step 2: Produce messages to the topic
 bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test
 
+Logs
+/home/dima/kafka/kafka_2.13-4.0.0/logs
+e.g. - /home/dima/kafka/kafka_2.13-4.0.0/logs/kafka-server-2.log
+tail -f logs/server.log
+
+# Monitor server logs in real-time
+tail -f logs/server.log
+
+# Monitor specific topic partition logs
+tail -f logs/animals-0/*.log
+
 LIST TOPICS
 bin/kafka-topics.sh \
 --bootstrap-server localhost:9092 \

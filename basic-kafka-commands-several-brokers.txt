@@ -42,6 +42,15 @@ bin/kafka-topics.sh \
 --describe \
 --topic animals
 
+Logs
+tail -f logs/server.log
+
+# Monitor server logs in real-time
+tail -f logs/server.log
+
+# Monitor specific topic partition logs
+tail -f logs/animals-0/*.log
+
 START CONSOLE PRODUCER
 bin/kafka-console-producer.sh --bootstrap-server localhost:9093,localhost:9097,localhost:9098 --topic animals
 
