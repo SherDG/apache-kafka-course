@@ -1,5 +1,28 @@
 Basic KAFKA Commands
 
+START KAFKA BROKERS
+Save the script as setup-kafka-cluster.sh and run it:
+bashchmod +x setup-kafka-cluster.sh
+./setup-kafka-cluster.sh
+
+Format the cluster (one-time setup):
+bash./format-cluster.sh
+
+Start all 3 servers:
+bash./start-cluster.sh
+
+Check cluster status:
+bash./status-cluster.sh
+
+Stop the cluster:
+bash./stop-cluster.sh
+
+GET INFORMATION ABOUT ACTIVE BROKER IDS
+grep "node.id" config/server*.properties
+bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9093
+
+
+
 START ZOOKEEPER
 bin/zookeeper-server-start.sh config/zookeeper.properties
 

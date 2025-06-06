@@ -1,2 +1,43 @@
 # apache-kafka-course
 This repository is for the Apache Kafka Course
+
+
+START KAFKA SEVERAL BROKERS
+Save the script as setup-kafka-cluster.sh in /home/dima/kafka/kafka_2.13-4.0.0 and run it:
+bashchmod +x setup-kafka-cluster.sh
+./setup-kafka-cluster.sh
+
+Format the cluster (one-time setup):
+bash./format-cluster.sh
+
+Start all 3 servers:
+bash./start-cluster.sh
+
+Check cluster status:
+bash./status-cluster.sh
+
+Stop the cluster:
+bash./stop-cluster.sh
+
+GET INFORMATION ABOUT ACTIVE BROKER IDS
+grep "node.id" config/server*.properties
+bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9093
+
+CREATE TOPIC
+bin/kafka-topics.sh \
+--bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
+--create \
+--replication-factor 3 \
+--partitions 5 \
+--topic animals
+
+LIST TOPICS
+bin/kafka-topics.sh \
+--bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
+--list
+
+TOPIC DETAILS
+bin/kafka-topics.sh \
+--bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
+--describe \
+--topic animals
