@@ -1,43 +1,82 @@
 # apache-kafka-course
+
 This repository is for the Apache Kafka Course
 
+Install Kafka 4.0.0 Linux Mint
+Повна процедура інсталяції крок за кроком:
 
-START KAFKA SEVERAL BROKERS
-Save the script as setup-kafka-cluster.sh in /home/dima/kafka/kafka_2.13-4.0.0 and run it:
-bashchmod +x setup-kafka-cluster.sh
-./setup-kafka-cluster.sh
+Перевірте наявність Java:
+bashjava -version
+Якщо не встановлено, встановіть:
+bashsudo apt update
+sudo apt install default-jdk
 
-Format the cluster (one-time setup):
-bash./format-cluster.sh
+Створіть каталог і завантажте Kafka:
+bashmkdir -p ~/kafka
+cd ~/kafka
+wget https://downloads.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz
 
-Start all 3 servers:
-bash./start-cluster.sh
+Розпакуйте архів:
+bashtar -xzf kafka_2.13-3.6.1.tgz
 
-Check cluster status:
-bash./status-cluster.sh
+Створення конфігурації для KRaft
 
-Stop the cluster:
-bash./stop-cluster.sh
+Створіть директорію kraft (якщо її немає):
+bashmkdir -p ~/kafka/kafka_2.13-4.0.0/config/kraft
 
-GET INFORMATION ABOUT ACTIVE BROKER IDS
-grep "node.id" config/server*.properties
-bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9093
+Створіть конфігураційний файл:
+bashvi ~/kafka/kafka_2.13-4.0.0/config/kraft/server.properties
 
-CREATE TOPIC
-bin/kafka-topics.sh \
---bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
---create \
---replication-factor 3 \
---partitions 5 \
---topic animals
+Додайте наступні налаштування до файлу:
+properties# KRaft specific configurations
+process.roles=broker,controller
+node.id=1
+controller.quorum.voters=1@localhost:9093
 
-LIST TOPICS
-bin/kafka-topics.sh \
---bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
---list
+# Listener configurations
 
-TOPIC DETAILS
-bin/kafka-topics.sh \
---bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
---describe \
---topic animals
+listeners=PLAINTEXT://:9092,CONTROLLER://:9093
+advertised.listeners=PLAINTEXT://localhost:9092
+listener.security.protocol.map=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+inter.broker.listener.name=PLAINTEXT
+controller.listener.names=CONTROLLER
+
+# Log configurations
+
+log.dirs=/tmp/kraft-combined-logs
+
+# Other configurations
+
+num.partitions=1
+default.replication.factor=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+
+Альтернативний підхід - модифікація існуючого server.properties
+Якщо ви віддаєте перевагу використанню існуючого файлу конфігурації:
+
+Скопіюйте існуючий файл як основу:
+bashcp ~/kafka/kafka_2.13-4.0.0/config/server.properties ~/kafka/kafka_2.13-4.0.0/config/kraft-server.properties
+
+Змініть конфігурацію для KRaft:
+bashvi ~/kafka/kafka_2.13-4.0.0/config/kraft-server.properties
+
+Додайте/оновіть наступні параметри:
+propertiesprocess.roles=broker,controller
+node.id=1
+controller.quorum.voters=1@localhost:9093
+listeners=PLAINTEXT://:9092,CONTROLLER://:9093
+advertised.listeners=PLAINTEXT://localhost:9092
+listener.security.protocol.map=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+inter.broker.listener.name=PLAINTEXT
+controller.listener.names=CONTROLLER
+log.dirs=/tmp/kraft-combined-logs
+
+Запуск Kafka з модифікованою конфігурацією
+
+Форматування сховища:
+bashbin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft-server.properties
+
+Запуск сервера:
+bashbin/kafka-server-start.sh config/kraft-server.properties
