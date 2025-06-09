@@ -4,20 +4,20 @@ This repository is for the Apache Kafka Course
 
 START KAFKA SEVERAL BROKERS
 Save the script as setup-kafka-cluster.sh in /home/dima/kafka/kafka_2.13-4.0.0 and run it:
-bashchmod +x setup-kafka-cluster.sh
+chmod +x setup-kafka-cluster.sh
 ./setup-kafka-cluster.sh
 
 Format the cluster (one-time setup):
-bash./format-cluster.sh
+./format-cluster.sh
 
 Start all 3 servers:
-bash./start-cluster.sh
+./start-cluster.sh
 
 Check cluster status:
-bash./status-cluster.sh
+./status-cluster.sh
 
 Stop the cluster:
-bash./stop-cluster.sh
+./stop-cluster.sh
 
 GET INFORMATION ABOUT ACTIVE BROKER IDS
 grep "node.id" config/server*.properties
@@ -43,8 +43,6 @@ bin/kafka-topics.sh \
 --topic animals
 
 Logs
-tail -f logs/server.log
-
 # Monitor server logs in real-time
 tail -f logs/server.log
 
@@ -63,4 +61,18 @@ START CONSOLE CONSUMER AND READ MESSAGES FROM BEGINNING
 bin/kafka-console-consumer.sh \
 --bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
 --topic animals \
+--from-beginning
+
+START CONSOLE CONSUMER AND READ MESSAGES FROM BEGINNING WITH SPECIFIC PARTITION
+bin/kafka-console-consumer.sh \
+--bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
+--topic animals \
+--partition 3 \
+--from-beginning
+
+bin/kafka-console-consumer.sh \
+--bootstrap-server localhost:9093,localhost:9097,localhost:9098 \
+--topic animals \
+--partition 3 \
+--offset 1 \
 --from-beginning
