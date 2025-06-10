@@ -79,8 +79,9 @@ bootstrap.servers=localhost:9092
 
 
 CONSUMER PERFORMANCE TEST
-bin/kafka-consumer-perf-test.sh \
---broker-list localhost:9092 \
---topic perf \
---messages 1000000
+Before run CONSUMER PERFORMANCE TEST run once or two PRODUCER PERFORMANCE TEST
+bin/kafka-consumer-perf-test.sh   --bootstrap-server localhost:9092   --topic perf2   --messages 1000   --timeout 60000
+
+for --messages 10000 it will show only
+start.time, end.time, data.consumed.in.MB, MB.sec, data.consumed.in.nMsg, nMsg.sec, rebalance.time.ms, fetch.time.ms, fetch.MB.sec, fetch.nMsg.s
 

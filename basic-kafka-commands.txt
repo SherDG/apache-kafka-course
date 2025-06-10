@@ -38,11 +38,6 @@ bin/kafka-topics.sh \
 --describe \
 --topic test
 
-START CONSOLE PRODUCER
-bin/kafka-console-producer.sh \
---broker-list localhost:9092 \
---topic test
-
 START CONSOLE CONSUMER
 bin/kafka-console-consumer.sh \
 --bootstrap-server localhost:9092 \
